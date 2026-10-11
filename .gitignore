@@ -64,7 +64,3 @@ wheels/
 
 # Claude
 .claude
-
-# raw inputs
-rl-bootcamp.qmd
-images/*
