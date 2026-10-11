@@ -1,0 +1,40 @@
+address_comp = {
+  'output_column_name': 'address',
+  'comparison_description': 'First-line address/PO box info',
+  'comparison_levels': [
+    {
+      'sql_condition': '(a_box_l IS NULL OR a_box_r IS NULL) AND (a_full_l IS NULL OR a_full_r IS NULL)',
+      'label_for_charts': 'Null',
+      'is_null_level': True,
+    },
+    {
+      'sql_condition': '(a_full_l IS NULL AND a_full_r IS NULL) AND a_box_l = a_box_r',
+      'label_for_charts': 'Exact match (box)',
+    },
+    {
+      'sql_condition': '(a_full_l IS NULL AND a_full_r IS NULL) AND a_box_l != a_box_r',
+      'label_for_charts': 'No match (box)'
+    },
+    {
+      'sql_condition' : 'a_full_l = a_full_r',
+      'label_for_charts' : 'Exact match (addr)'
+    },
+    {
+      'sql_condition': 'jaro_winkler_similarity(a_full_l, a_full_r) > 0.95',
+      'label_for_charts': 'jw > 0.95'
+    },
+    {
+      'sql_condition': 'jaro_winkler_similarity(a_full_l, a_full_r) > 0.9',
+      'label_for_charts': 'jw > 0.9'
+    },
+    {
+      'sql_condition': 'jaro_winkler_similarity(a_full_l, a_full_r) > 0.85',
+      'label_for_charts': 'jw > 0.85'
+    },
+    {
+      'sql_condition': 'jaro_winkler_similarity(a_full_l, a_full_r) > 0.8',
+      'label_for_charts': 'jw > 0.8'
+    },
+    {'sql_condition': 'ELSE', 'label_for_charts': 'All other comparisons (addr)'}
+  ]
+}

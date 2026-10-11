@@ -1,0 +1,31 @@
+place_comp = {
+  'output_column_name': 'place',
+  'comparison_description': 'Combination level for place (ZIP/city)',
+  'comparison_levels': [
+    {
+      'sql_condition': '(a_zip_l IS NULL OR a_zip_r IS NULL) AND (a_city_l IS NULL OR a_city_r IS NULL)',
+      'label_for_charts': 'Null',
+      'is_null_level': True,
+    },
+    {
+      'sql_condition': 'a_zip_l = a_zip_r',
+      'label_for_charts': 'Exact (zip)',
+      'tf_adjustment_column': 'zip',
+      'tf_adjustment_weight': 0.5,
+      # Where the term frequency adjustment implies a u value below this value, use this minimum value instead
+      # This prevents excessive weight being assigned to very unusual terms, such as a collision on a typo
+      'tf_minimum_u_value': 0.001,
+    },
+    {
+      'sql_condition': 'a_city_l = a_city_r',
+      'label_for_charts': 'Exact (city)',
+      'tf_adjustment_column': 'city',
+      'tf_adjustment_weight': 1.0,
+    },
+    {
+      'sql_condition' : 'jaro_similarity(a_city_l, a_city_r) > 0.9',
+      'label_for_charts' : 'jaro(city) > 0.9'
+    },
+    {'sql_condition': 'ELSE', 'label_for_charts': 'All other comparisons'}
+  ]
+}
